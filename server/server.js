@@ -5,6 +5,7 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const { User } = require('./models/user');
 const { ObjectID } = require('mongodb');
+const { request } = require('express');
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -52,6 +53,23 @@ app.get('/todos/:id', (req, res) => {
     },(err) => {
         res.status(404).send()   
     })
+});
+
+app.delete("/todos/:id", (req, res) => {
+    var id =req.params.id
+    if(!ObjectID.isValid(id)){
+        return req.status(404).send()
+    }
+
+    Todo.findByIdAndRemove(id)
+        .then((todo) => {
+            if(todo.length){
+                return res.status(404)
+            }
+            res.send(todo)
+        }).catch((err) => {
+            res.status(404).send()
+        })
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
