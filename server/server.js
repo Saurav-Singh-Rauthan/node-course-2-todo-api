@@ -18,7 +18,7 @@ app.post('/todos', (req, res) => {
     newtodo.save().then((doc) => {
         res.send(doc)
     },(err) => {
-        res.send(err)
+        res.status(400).send(err)
     })
 });
 
@@ -28,4 +28,7 @@ app.post('/todos', (req, res) => {
 
 app.listen(port, () => console.log(`Example app listening on port port!`))
 
+module.exports ={
+    app
+}
   
